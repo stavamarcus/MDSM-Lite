@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Cache data
+data/cache/prices/*
+!data/cache/prices/.gitkeep
+
+data/cache/metadata/*
+!data/cache/metadata/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.temp
+
+# Python build
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/

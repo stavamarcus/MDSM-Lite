@@ -1,0 +1,7 @@
+conid,ticker,exchange,currency,instrument_type,sector,industry,active_flag
+265598,AAPL,NASDAQ,USD,STK,Technology,Consumer Electronics,1
+272093,MSFT,NASDAQ,USD,STK,Technology,Software,1
+3691937,AMZN,NASDAQ,USD,STK,Consumer Cyclical,E-Commerce,1
+4815747,NVDA,NASDAQ,USD,STK,Technology,Semiconductors,1
+107113386,META,NASDAQ,USD,STK,Technology,Internet Content,1
+208813720,TSLA,NASDAQ,USD,STK,Consumer Cyclical,Auto Manufacturers,1

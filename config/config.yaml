@@ -1,0 +1,35 @@
+# MDSM-Lite – Main Configuration
+# Version: 1.1
+# Všechny cesty jsou relativní vůči kořeni projektu.
+
+project:
+  name: MDSM-Lite
+
+tws:
+  host: "127.0.0.1"
+  port: 7496
+  client_id: 1
+  timeout_seconds: 30
+
+market:
+  exchange_timezone: "America/New_York"
+  market_close_time: "16:00"
+  ingest_buffer_minutes: 15
+
+paths:
+  docs:            "docs"
+  scripts:         "scripts"
+  cache_prices:    "data/cache/prices"
+  cache_metadata:  "data/cache/metadata"
+  universe:        "data/universe/universe.csv"
+  logs:            "logs"
+
+cache:
+  format_version:  1
+  price_format:    "parquet"
+  metadata_format: "json"
+
+logging:
+  system_log: "logs/system.log"
+  errors_log: "logs/errors.log"
+  level:      "DEBUG"
