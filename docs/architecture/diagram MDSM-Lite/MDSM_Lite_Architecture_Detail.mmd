@@ -1,0 +1,93 @@
+graph TD
+
+    subgraph EXTERNAL_WORLD
+        IBKR[IBKR TWS API]
+    end
+
+    subgraph MDSM_LITE_CORE
+        subgraph CONFIG_LAYER
+            CFG[Config<br/>paths, TWS host/port, market_close_time, ingest_buffer]
+        end
+
+        subgraph ACCESS_LAYER
+            ACC[Access Interface]
+            DECIDE{Cache valid<br/>and sufficient?}
+            CAL[Market Calendar]
+            META_CHECK[Metadata Check<br/>cache_format_version<br/>permissions_status]
+        end
+
+        subgraph PROVIDER_LAYER
+            REQ[RequestManager Singleton]
+            PROV[TWS Provider]
+        end
+
+        subgraph CACHE_LAYER
+            READ[Cache Reader]
+            WRITE[Atomic Cache Writer<br/>tmp -> final]
+            META[Metadata Manager]
+        end
+
+        subgraph MAINTENANCE
+            CLEAN[Cleanup Tool<br/>dry-run / execute]
+        end
+
+        subgraph OBSERVABILITY
+            LOG[Logs / Metrics<br/>latency, cache hit ratio, status]
+        end
+    end
+
+    subgraph FILESYSTEM_STORAGE
+        UNI[(universe.csv)]
+        PRICES[prices/*.parquet]
+        METADATA[metadata/*.json]
+        LOGFILES[logs/*.log]
+    end
+
+    subgraph CONSUMERS
+        MOD1[Market Breadth]
+        MOD2[Sector RS]
+        MOD3[Screener / AI]
+        MODN[Other Modules]
+    end
+
+    MOD1 --> ACC
+    MOD2 --> ACC
+    MOD3 --> ACC
+    MODN --> ACC
+
+    CFG --> ACC
+    CFG --> REQ
+    CFG --> CLEAN
+
+    UNI -. defines universe .-> ACC
+
+    ACC --> CAL
+    ACC --> META_CHECK
+    META_CHECK --> DECIDE
+
+    DECIDE -- Yes --> READ
+    READ --> PRICES
+    READ --> METADATA
+    READ --> ACC
+
+    DECIDE -- No / Force Refresh --> REQ
+    REQ --> PROV
+    PROV --> IBKR
+    IBKR --> PROV
+    PROV --> REQ
+
+    REQ --> WRITE
+    WRITE --> PRICES
+
+    REQ --> META
+    META --> METADATA
+
+    ACC --> MOD1
+    ACC --> MOD2
+    ACC --> MOD3
+    ACC --> MODN
+
+    ACC -. status / cache hit .-> LOG
+    REQ -. latency / API status .-> LOG
+    CLEAN -. cleanup activity .-> LOG
+    LOG --> LOGFILES
